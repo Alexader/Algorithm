@@ -1,0 +1,7 @@
+# for vscode config file
+.vscode/
+
+# c++ compile file
+*.o
+*.exe
+
