@@ -43,8 +43,9 @@ values violence(int *arr, int n) {
 
 values findCrossMax(int *arr, int low, int mid, int high) {
 	int left_max, right_max;
-	int left, right;
+	int left = mid, right = mid;
 	int sum = 0;
+	// exclude middle point on left side
 	for(int i=mid - 1;i>=low;i--) {
 		sum += arr[i];
 		if(sum > left_max) {
@@ -72,7 +73,7 @@ largest subarray on right side, find largest subarray cross middle.
 time complexity is nlog(n)
 */
 values division(int *arr, int low, int high) {
-	if(low == high) {
+	if(low >= high - 1) {
 		values v(low, high, arr[low]);
 		return v;
 	}
