@@ -54,8 +54,8 @@ int BottomUpCutRod(int *p, int n, int* solve, int* record, int c) {
 	for(int i=0;i<=n;i++) {
 		int max = 0;
 		for(int j=0;j<=i;j++) {
-			if(max < p[j] + record[i-j] - (i-j)? 0: c) {
-				max = p[j] + record[i-j] - (i-j)? 0: c;
+			if(max < p[j] + record[i-j] - ((i!=j)&&(j!=0) ? c : 0)) {
+				max = p[j] + record[i-j] - ((i!=j)&&(j!=0) ? c : 0);
 				solve[i] =  j;
 			}
 		}
