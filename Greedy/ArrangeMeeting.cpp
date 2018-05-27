@@ -37,33 +37,30 @@ int main()
 	int k, sum = 0;
 	scanf("%d", &k);
 	meeting *schedual = new meeting[k];
-	meeting *temp = new meeting[k];
+	int *temp = new int[k];
 	for (int i = 0; i < k; i++)
 		scanf("%d%d", &schedual[i].start, &schedual[i].end);
 
 	// 将会议按照起始时间升序排序，如果起始时间相同，结束时间小的排在前面
 	std::sort(schedual, schedual + k, cmp);
 	int lastX = 0, top = 0;
-	do
+	while (k != 0)
 	{
 		for (int i = 0; i < k; i++)
 		{
 			if (schedual[i].start >= lastX)
 				lastX = schedual[i].end;
 			else
-			{
-				temp[top].start = schedual[i].start;
-				temp[top].end = schedual[i].end;
-				top++;
-			}
+				//保存未被安排的会议下标
+				temp[top++] = i;
 		}
 		for(int i=0;i<top;i++) {
-			schedual[top].start = temp[i].start;
-				schedual[top].end = temp[i].end;
+			schedual[top].start = schedual[temp[i]].start;
+			schedual[top].end = schedual[temp[i]].end;
 		}
 		k = top;
 		lastX = top = 0;
 		sum++;
-	} while (k != 0);
+	}
 	printf("%d", sum);
 }
