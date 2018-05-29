@@ -1,92 +1,51 @@
-#include<iostream>
-#include<algorithm>
-using namespace std;
+// #include<stdio.h>
+// void move(int k, char a, char b) {
+// 	printf("%d %c %c\n", k, a, b);
+// }
+// void Hnoii(int n, char a, char b, char c) {
+// 	if(n==1)
+// 		move(n, a, b);
+// 	else {
+// 		Hnoii(n-1, a, c, b);
+// 		move(n, a, b);
+// 		Hnoii(n-1, c, b, a);
+// 	}
+// }
+// int main() {
+// 	int n;
+// 	scanf("%d", &n);
+// 	Hnoii(n, 'a', 'b', 'c');
+// }
+#include <stdio.h>
+#include <algorithm>
+#include<vector>
+using std::vector;
 
-/*
-Dynamic Programming (Cutting a Rod)
-Given a rod of length n inches and an array of prices that contains prices
-of all pieces of size smaller than n. Determine the maximum value obtainable
-by cutting up the rod and selling the pieces. For example, if length of the
-rod is 8 and the values of different pieces are given as following, then the
-maximum obtainable value is 22 (by cutting in two pieces of lengths 2 and 6)
-length   | 1   2   3   4   5   6   7   8  
---------------------------------------------
-price    | 1   5   8   9  10  17  17  20
-And if the prices are as following, then the maximum obtainable value is 24
-(by cutting in eight pieces of length 1)
-
-length   | 1   2   3   4   5   6   7   8  
---------------------------------------------
-price    | 3   5   8   9  10  17  17  20
-
-Problem: If you have a rod of n inches, and every cut-up will cost `c` unit money,
-please write a algorithm to determine how to cut and print out solution like below.
-price array is given and you donot have to worry about n is larger than array length
-Given:
-length   | 0   1   2   3   4   5    6    7    8    9    10
------------------------------------------------------------
-price    | 0   1   5   8   9   10   17   17   20   24   30
-c : 1
-Output:
-You shuld cut like this:
-1 3 4 5 6
-total cost is 17.
-*/
-
-// Only output best price result.
-int CutRod(int *p, int n, int* solve, int* record, int c) {
-	if(solve[n] >= 0)
-		return solve[n];
-	int q;
-	if(n == 0)
-		q = 0;
-	else {
-		q = -1;
-		for(int i=1;i<=n;i++) {
-			q = max(q, p[i] + CutRod(p, n-i, solve, record, c) - c);
+int sum = 0;
+int *mark;
+bool Subset(vector<int> &S, int k, int c) {
+	if(sum == c) return true;
+	else if(sum > c || k+1 > S.size()) return false;
+	else{
+		if(Subset(S, k+1, c-S[k])) {
+			printf("%d ", S[k]);
+			sum += S[k];
+			return true;
 		}
-	}
-	solve[n] = q;
-	return q;
-}
-
-int BottomUpCutRod(int *p, int n, int* solve, int* record, int c) {
-	for(int i=0;i<=n;i++) {
-		int max = 0;
-		for(int j=0;j<=i;j++) {
-			if(max < p[j] + record[i-j] - ((i!=j)&&(j!=0) ? c : 0)) {
-				max = p[j] + record[i-j] - ((i!=j)&&(j!=0) ? c : 0);
-				solve[i] =  j;
-			}
-		}
-		record[i] = max;
-	}
-	return record[n];
-}
-
-void printCutSolution(int *solve, int n) {
-	cout<<"You shuld cut like this:"<<endl;
-	int t = n;
-	while(t>0) {
-		cout<<solve[t]<<" ";
-		t = t - solve[t];
+		else if(Subset(S, k+1, c)) return true;
 	}
 }
-
 int main() {
-	int p[] = {0,1,5,8,9,10,17,17,20,24,30};
-	int n, c;
-	cout<<"what is the length of the rod:"<<endl;
-	cin>>n;
-	cout<<"what is the cost per cut:"<<endl;
-	cin>>c;
-
-	int *solve = new int[n+1];
-	int *record = new int[n+1];
-	for(int i=0;i<=n;i++)
-		record[i] = -1;
-	BottomUpCutRod(p, n, solve, record, c);
-	cout<<"total cost is : "<<BottomUpCutRod(p, n, solve, record, c)<<endl;	
-	cout<<"total cost is : "<<CutRod(p, n, solve, record, c)<<endl;
-	printCutSolution(solve, n);
+	int n,c;
+	vector<int> arr;
+	while(scanf("%d%d", &n, &c)!=EOF) {
+		int temp;
+		mark = new int[n];
+		for(int i=0;i<n;i++) {
+			scanf("%d", &temp);
+			arr.push_back(temp);
+		}
+		Subset(arr, 0, c);
+	}
+	return 0;
 }
